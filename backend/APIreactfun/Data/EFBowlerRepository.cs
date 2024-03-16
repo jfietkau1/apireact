@@ -16,6 +16,9 @@
         // Implement the GetBowlerTeams method to perform the join
         public IEnumerable<BowlerTeamInfo> GetBowlerTeams()
         {
+            // Define the team names you're interested in
+            var teamNames = new[] { "Marlins", "Sharks" }.ToList();
+
             var bowlerTeams = _bowlerContext.Bowlers
                 .Join(_bowlerContext.Teams,
                     bowler => bowler.TeamId,
@@ -33,11 +36,14 @@
                         BowlerPhoneNumber = bowler.BowlerPhoneNumber,
                         TeamId = team.TeamId,
                         TeamName = team.TeamName,
-                        CaptainId = team.CaptainId 
+                        CaptainId = team.CaptainId
                     })
+                .Where(bti => teamNames.Contains(bti.TeamName)) // Direct comparison with proper casing
                 .ToList();
 
             return bowlerTeams;
         }
+
     }
 }
+
